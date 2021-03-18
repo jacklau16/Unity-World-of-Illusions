@@ -4,28 +4,37 @@ using UnityEngine;
 
 public class DragRod : MonoBehaviour
 {
-    public float mouseSensitivity = 100f;
+    public float mouseSensitivity = 3;
     private Vector3 screenPoint;
     private Vector3 offset;
+    private bool isDragging = false;
+    private bool isStillMouseOver = false;
+    private float rodMinZPos = -4.8f;
+    private float rodMaxZPos = 0.8f;
 
-    // Start is called before the first frame update
-    void Start()
+    private void OnMouseEnter()
     {
-        
+        Debug.Log("DragRod: onMouseEnter");
+        isStillMouseOver = true;
+        if (!isDragging)
+            CursorController.instance.ActivateGrabOpenCursor();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnMouseExit()
     {
-        
+        Debug.Log("DragRod: onMouseExit");
+        isStillMouseOver = false;
+        if (!isDragging)
+            CursorController.instance.ActivateDefaultCursor();
     }
 
     private void OnMouseDown()
     {
+        Debug.Log("DragRod: onMouseDown");
+        isDragging = true;
+        CursorController.instance.ActivateGrabCloseCursor();
         screenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);
-
         offset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z));
-
     }
 
     private void OnMouseDrag()
@@ -42,7 +51,22 @@ public class DragRod : MonoBehaviour
         //------Method 2--------
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         //float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
-        transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z - mouseX);
+        float newZ = transform.localPosition.z - mouseX;
+        if (newZ < rodMinZPos)
+            newZ = rodMinZPos;
+        if (newZ > rodMaxZPos)
+            newZ = rodMaxZPos;
+        transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, newZ);
         
     }
+
+    private void OnMouseUp()
+    {
+        isDragging = false;
+        if (isStillMouseOver)
+            CursorController.instance.ActivateGrabOpenCursor();
+        else
+            CursorController.instance.ActivateDefaultCursor();
+    }
+
 }

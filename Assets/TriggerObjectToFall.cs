@@ -4,16 +4,14 @@ using UnityEngine;
 
 public class TriggerObjectToFall : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public void OnMouseEnter()
     {
-        
+        CursorController.instance.ActivateClickCursor();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnMouseExit()
     {
-        
+        CursorController.instance.ActivateDefaultCursor();
     }
 
     private void OnMouseDown()

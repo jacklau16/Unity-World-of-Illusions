@@ -1,4 +1,7 @@
-﻿using System.Collections;
+﻿//-----------------------------------------
+//  TO BE REMOVED
+//-----------------------------------------
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,7 +18,7 @@ public class RoomEntryTrigger2 : MonoBehaviour
 
     private Vector3 wantedPosition = new Vector3(0, 0, 0);
     private Vector3 targetPosition;
-    private Vector2 origPosition;
+    private Vector3 origPosition;
     private CharacterController _controller;
     private Vector3 _velocity;
     private Vector3 offset;
@@ -30,13 +33,15 @@ public class RoomEntryTrigger2 : MonoBehaviour
         step = speed * Time.deltaTime;
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        // Disable the trigger after its first time use
-        BoxCollider bc = gameObject.GetComponent<BoxCollider>();
-        //bc.isTrigger = false;
-        bc.enabled = false;
-
+    /*   private void OnTriggerEnter(Collider other)
+       {
+           // Disable the trigger after its first time use
+           BoxCollider bc = gameObject.GetComponent<BoxCollider>();
+           //bc.isTrigger = false;
+           bc.enabled = false;
+    */
+    private void OnMouseDown()
+    { 
         origPosition = slaveObject.position;
         targetPosition = masterObject.position;
         //targetPosition = masterObject.TransformPoint(wantedPosition);
