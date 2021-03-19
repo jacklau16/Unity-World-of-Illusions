@@ -5,6 +5,7 @@ using UnityEngine;
 public class GetKeyTrigger : MonoBehaviour
 {
     public GameObject keyPicture;
+    public Material matWhite;
 
     // Start is called before the first frame update
     void Start()
@@ -35,12 +36,13 @@ public class GetKeyTrigger : MonoBehaviour
         GameObject[] keyWalls = GameObject.FindGameObjectsWithTag("Key Puzzle");
         foreach (GameObject keyWall in keyWalls)
         {
-            Material mat = keyWall.GetComponent<Renderer>().material;
-            Destroy(mat);
+            //Material mat = keyWall.GetComponent<Renderer>().material;
+            //Destroy(mat);
+            keyWall.GetComponent<Renderer>().material = matWhite;
         }
 
         keyPicture.SetActive(true);
-        UIController.instance.showKeyImage();
+        UIController.instance.showImageKey(true);
         StartCoroutine(HideObject(3));
 
     }

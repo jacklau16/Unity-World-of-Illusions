@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Key Puzzle
+  - UI Text
+  - UI Text Intro
   layers:
   - Default
   - TransparentFX

@@ -11,22 +11,27 @@ public class UIController : MonoBehaviour
     public Texture2D cursorGrabOpen;
     public Texture2D cursorGrabClose;
     public Texture2D cursorDefault;
-    public Image uIKeyImage;
+    public Image uiImageKey;
+
+    public GameObject uiTextIntro;
 
     private void Awake()
     {
         instance = this;
-        instance.hideKeyImage();
+        instance.showImageKey(false);
+        //instance.showTextIntro(false);
     }
 
-    public void showKeyImage()
+
+    public void showTextIntro(bool show)
     {
-        uIKeyImage.enabled = true;
+        uiTextIntro.SetActive(show);
     }
 
-    public void hideKeyImage()
+
+    public void showImageKey(bool show)
     {
-        uIKeyImage.enabled = false;
+        uiImageKey.enabled = show;
     }
 
 }
