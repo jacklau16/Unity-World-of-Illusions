@@ -8,6 +8,7 @@ public class Room2InteractionTrigger : MonoBehaviour
     public Transform slaveObject;
     public GameObject displayObject;
     public Camera currentCamera;
+    public GameObject uiTextPressEscHint;
     public float speed = 20f;
     public float cameraRotateX = 27f;
     public float cameraRotateY = 0f;
@@ -16,12 +17,14 @@ public class Room2InteractionTrigger : MonoBehaviour
     private Vector3 targetPosition;
     private Vector3 offset;
     private CharacterController _controller;
+    private AudioSource audioClick;
     private float step;
 
     private void Awake()
     {
         displayObject.SetActive(false);
         _controller = slaveObject.GetComponent<CharacterController>();
+        audioClick = gameObject.GetComponent<AudioSource>();
         targetPosition = masterObject.position;
         step = speed * Time.deltaTime;
     }
@@ -43,7 +46,8 @@ public class Room2InteractionTrigger : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         CursorController.instance.hideUICursorImage();
         Cursor.visible = true;
-
+        audioClick.Play();
+        uiTextPressEscHint.SetActive(true);
         // Wait for 4 seconds and show the display object 
         StartCoroutine(ShowObjects(4));
     }
@@ -65,6 +69,8 @@ public class Room2InteractionTrigger : MonoBehaviour
                 Cursor.lockState = CursorLockMode.Locked;
                 CursorController.instance.showUICursorImage();
                 Cursor.visible = false;
+
+                uiTextPressEscHint.SetActive(false);
             }
             
             currentCamera.transform.rotation = Quaternion.RotateTowards(currentCamera.transform.rotation, Quaternion.Euler(cameraRotateX, cameraRotateY, 0), step); ;

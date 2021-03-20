@@ -8,22 +8,26 @@ public class Room1InteractionTrigger : MonoBehaviour
     public Transform slaveObject;
     public GameObject displayObject;
     public Camera currentCamera;
-    public float speed = 20f;
-    public float cameraRotateX = 30f;
+    public GameObject uiTextPressEscHint;
+    public float speed = 100f;
+    public float cameraRotateX = 35f;
     public float cameraRotateY = 10f;
+    public float showObjectDelay = 2f;
+
+    private float sphereYOffset = -52f;
 
     private Vector3 targetPosition;
     private CharacterController _controller;
     private float step;
     private Vector3 offset;
-
+    private AudioSource audioClick;
 
     private void Awake()
     {
         displayObject.SetActive(false);
         //currentCamera = Camera.current.GetComponent<Camera>();
         _controller = slaveObject.GetComponent<CharacterController>();
-        targetPosition = masterObject.position;
+        audioClick = gameObject.GetComponent<AudioSource>();
         step = speed * Time.deltaTime;
     }
 
@@ -43,13 +47,16 @@ public class Room1InteractionTrigger : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         CursorController.instance.hideUICursorImage();
         Cursor.visible = true;
+        uiTextPressEscHint.SetActive(true);
+        audioClick.Play();
 
-        // Wait for 4 seconds and show the display object 
-        StartCoroutine(ShowObjects(4));
+        // Wait for N seconds and show the display object 
+        StartCoroutine(ShowObjects(showObjectDelay));
     }
 
     IEnumerator ShowObjects(float seconds)
     {
+        showSpheres();
         yield return new WaitForSeconds(seconds);
         displayObject.SetActive(true);
     }
@@ -65,8 +72,10 @@ public class Room1InteractionTrigger : MonoBehaviour
                 Cursor.lockState = CursorLockMode.Locked;
                 CursorController.instance.showUICursorImage();
                 Cursor.visible = false;
-            }
 
+                uiTextPressEscHint.SetActive(false);
+            }
+            targetPosition = masterObject.position;
             currentCamera.transform.rotation = Quaternion.RotateTowards(currentCamera.transform.rotation, Quaternion.Euler(cameraRotateX, cameraRotateY, 0), step);
             offset = targetPosition - _controller.transform.position;
 
@@ -78,5 +87,14 @@ public class Room1InteractionTrigger : MonoBehaviour
             }
         }
 
+    }
+
+    private void showSpheres()
+    {
+        GameObject[] spheres = GameObject.FindGameObjectsWithTag("Room 1 Spheres");
+        foreach (GameObject sphere in spheres)
+        {
+            Instantiate(sphere, sphere.transform.position + new Vector3(0, sphereYOffset, 0), Quaternion.identity);
+        }
     }
 }

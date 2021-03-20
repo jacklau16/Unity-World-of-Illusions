@@ -6,32 +6,42 @@ public class ToggleCassetteSound : MonoBehaviour
 {
     public GameObject soundPlayer;
     public Material ledMaterial;
-    AudioSource audioSource;
+    AudioSource audioDinosaur;
+    AudioSource audioClick;
     bool isPlaying;
 
     private void Start()
     {
         isPlaying = true;
-        audioSource = soundPlayer.GetComponent<AudioSource>();
+        audioDinosaur = soundPlayer.GetComponent<AudioSource>();
+        audioClick = soundPlayer.GetComponents<AudioSource>()[1];
+        ledMaterial.EnableKeyword("_EMISSION");
     }
 
     private void OnMouseOver()
     {
         //Debug.Log("ToggleCassetteSound: OnMouseOver()!");
-        
+
     }
     private void OnMouseDown()
     {
-        //Debug.Log("ToggleCassetteSound: MouseClick!");
+        audioClick.Play();
+        StartCoroutine(ToggleCassettePlayer(1));
+    }
+
+
+    IEnumerator ToggleCassettePlayer(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
         if (isPlaying)
         {
-            audioSource.Stop();
+            audioDinosaur.Stop();
             isPlaying = false;
             ledMaterial.DisableKeyword("_EMISSION");
         }
         else
         {
-            audioSource.Play();
+            audioDinosaur.Play();
             isPlaying = true;
             ledMaterial.EnableKeyword("_EMISSION");
         }

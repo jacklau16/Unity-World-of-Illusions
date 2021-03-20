@@ -33,17 +33,17 @@ public class GetKeyTrigger : MonoBehaviour
     private void OnMouseDown()
     {
         Debug.Log("GetKey!");
-        GameObject[] keyWalls = GameObject.FindGameObjectsWithTag("Key Puzzle");
-        foreach (GameObject keyWall in keyWalls)
+        GameObject[] keyPllars = GameObject.FindGameObjectsWithTag("Key Puzzle");
+        foreach (GameObject keyPillar in keyPllars)
         {
-            //Material mat = keyWall.GetComponent<Renderer>().material;
-            //Destroy(mat);
-            keyWall.GetComponent<Renderer>().material = matWhite;
+            // Change the material of the pillars showing the key picture to white
+            keyPillar.GetComponent<Renderer>().material = matWhite;
         }
 
         keyPicture.SetActive(true);
         UIController.instance.showImageKey(true);
-        StartCoroutine(HideObject(3));
+        GlobalState.hasKey = true;
+        StartCoroutine(HideObject(4));
 
     }
 

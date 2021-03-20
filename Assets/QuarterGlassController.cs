@@ -6,10 +6,13 @@ public class QuarterGlassController : MonoBehaviour
 {
     public GameObject quarterGlass;
     private Animator glassAnimator;
+    private AudioSource audioOpening;
+
     void Start()
     {
         glassAnimator = quarterGlass.GetComponent<Animator>();
         glassAnimator.SetBool("IsTriggered", false);
+        audioOpening = quarterGlass.GetComponent<AudioSource>();
     }
 
     private void OnMouseEnter()
@@ -25,6 +28,8 @@ public class QuarterGlassController : MonoBehaviour
     private void OnMouseDown()
     {
         glassAnimator.SetBool("IsTriggered", true);
-        Debug.Log("Triggered!!");
+        audioOpening.Play();
+        CursorController.instance.ActivateDefaultCursor();
+        gameObject.SetActive(false);
     }
 }
