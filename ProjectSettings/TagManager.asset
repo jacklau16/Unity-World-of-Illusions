@@ -9,6 +9,7 @@ TagManager:
   - UI Text Intro
   - UI TextPressEscHint
   - Room 1 Spheres
+  - FirstPersonController
   layers:
   - Default
   - TransparentFX

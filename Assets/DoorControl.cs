@@ -10,6 +10,7 @@ public class DoorControl : MonoBehaviour
     private AudioSource audioDoorOpening;
     private AudioSource audioDoorClosing;
     private AudioSource audioDoorUnlock;
+    private AudioSource audioAccessDenied;
     private AudioSource[] sounds;
 
     void Start()
@@ -17,7 +18,8 @@ public class DoorControl : MonoBehaviour
         doorAnimator = doorObject.GetComponent<Animator>();
         doorAnimator.SetBool("hasKey", false);
         audioDoorUnlock = doorObject.GetComponents<AudioSource>()[0];
-        audioDoorOpening = doorObject.GetComponents<AudioSource>()[1];
+        audioAccessDenied = doorObject.GetComponents<AudioSource>()[1];
+        audioDoorOpening = doorObject.GetComponents<AudioSource>()[2];
 
     }
 
@@ -29,13 +31,15 @@ public class DoorControl : MonoBehaviour
 
     private void OnMouseDown()
     {
-        Debug.Log("MouseDown on DOOR");
         if (GlobalState.hasKey)
         {
             doorAnimator.SetBool("hasKey", true);
             PlayDoorUnlockSound();
             StartCoroutine(PlayDelayedDoorOpeningSound(1.5f));
             StartCoroutine(HideObject(4));
+        } else
+        {
+            PlayAccessDeniedSound();
         }
     }
 
@@ -54,6 +58,11 @@ public class DoorControl : MonoBehaviour
     public void PlayDoorUnlockSound()
     {
         audioDoorUnlock.Play();
+    }
+
+    public void PlayAccessDeniedSound()
+    {
+        audioAccessDenied.Play();
     }
 
     // Wait for N seconds and hide the display object 

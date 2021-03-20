@@ -5,10 +5,13 @@ using UnityEngine;
 public class Room1InteractionTrigger : MonoBehaviour
 {
     public Transform masterObject;
-    public Transform slaveObject;
+    //public Transform slaveObject;
+    public string slaveObjectTag = "FirstPersonController";
     public GameObject displayObject;
-    public Camera currentCamera;
+    //public Camera currentCamera;
+    public string currentCameraTag = "MainCamera";
     public GameObject uiTextPressEscHint;
+    public GameObject uiTextInstruction;
     public float speed = 100f;
     public float cameraRotateX = 35f;
     public float cameraRotateY = 10f;
@@ -18,6 +21,7 @@ public class Room1InteractionTrigger : MonoBehaviour
 
     private Vector3 targetPosition;
     private CharacterController _controller;
+    private GameObject currentCamera;
     private float step;
     private Vector3 offset;
     private AudioSource audioClick;
@@ -25,8 +29,10 @@ public class Room1InteractionTrigger : MonoBehaviour
     private void Awake()
     {
         displayObject.SetActive(false);
+        currentCamera = GameObject.FindGameObjectWithTag(currentCameraTag);
         //currentCamera = Camera.current.GetComponent<Camera>();
-        _controller = slaveObject.GetComponent<CharacterController>();
+        _controller = GameObject.FindGameObjectWithTag(slaveObjectTag).GetComponent<CharacterController>();
+        //_controller = slaveObject.GetComponent<CharacterController>();
         audioClick = gameObject.GetComponent<AudioSource>();
         step = speed * Time.deltaTime;
     }
@@ -48,6 +54,7 @@ public class Room1InteractionTrigger : MonoBehaviour
         CursorController.instance.hideUICursorImage();
         Cursor.visible = true;
         uiTextPressEscHint.SetActive(true);
+        uiTextInstruction.SetActive(true);
         audioClick.Play();
 
         // Wait for N seconds and show the display object 
@@ -72,8 +79,8 @@ public class Room1InteractionTrigger : MonoBehaviour
                 Cursor.lockState = CursorLockMode.Locked;
                 CursorController.instance.showUICursorImage();
                 Cursor.visible = false;
-
                 uiTextPressEscHint.SetActive(false);
+                uiTextInstruction.SetActive(false);
             }
             targetPosition = masterObject.position;
             currentCamera.transform.rotation = Quaternion.RotateTowards(currentCamera.transform.rotation, Quaternion.Euler(cameraRotateX, cameraRotateY, 0), step);

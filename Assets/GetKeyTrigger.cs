@@ -21,8 +21,11 @@ public class GetKeyTrigger : MonoBehaviour
 
     public void OnMouseEnter()
     {
-        CursorController.instance.ActivateClickCursor();
-        Debug.Log("GetKey: Correct Position!");
+        if (GlobalState.onCarpet)
+        {
+            CursorController.instance.ActivateClickCursor();
+            Debug.Log("GetKey: Correct Position!");
+        }
     }
 
     public void OnMouseExit()
@@ -32,19 +35,21 @@ public class GetKeyTrigger : MonoBehaviour
 
     private void OnMouseDown()
     {
-        Debug.Log("GetKey!");
-        GameObject[] keyPllars = GameObject.FindGameObjectsWithTag("Key Puzzle");
-        foreach (GameObject keyPillar in keyPllars)
+        if (GlobalState.onCarpet)
         {
-            // Change the material of the pillars showing the key picture to white
-            keyPillar.GetComponent<Renderer>().material = matWhite;
+            Debug.Log("GetKey!");
+            GameObject[] keyPllars = GameObject.FindGameObjectsWithTag("Key Puzzle");
+            foreach (GameObject keyPillar in keyPllars)
+            {
+                // Change the material of the pillars showing the key picture to white
+                keyPillar.GetComponent<Renderer>().material = matWhite;
+            }
+
+            keyPicture.SetActive(true);
+            UIController.instance.showImageKey(true);
+            GlobalState.hasKey = true;
+            StartCoroutine(HideObject(4));
         }
-
-        keyPicture.SetActive(true);
-        UIController.instance.showImageKey(true);
-        GlobalState.hasKey = true;
-        StartCoroutine(HideObject(4));
-
     }
 
     IEnumerator HideObject(float seconds)

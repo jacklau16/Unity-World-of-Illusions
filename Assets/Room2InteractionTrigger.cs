@@ -5,10 +5,14 @@ using UnityEngine;
 public class Room2InteractionTrigger : MonoBehaviour
 {
     public Transform masterObject;
-    public Transform slaveObject;
+    //public Transform slaveObject;
+    public string slaveObjectTag = "FirstPersonController";
     public GameObject displayObject;
-    public Camera currentCamera;
+    //public Camera currentCamera;
+    public string currentCameraTag = "MainCamera";
+
     public GameObject uiTextPressEscHint;
+    public GameObject uiTextInstruction;
     public float speed = 20f;
     public float cameraRotateX = 27f;
     public float cameraRotateY = 0f;
@@ -17,13 +21,17 @@ public class Room2InteractionTrigger : MonoBehaviour
     private Vector3 targetPosition;
     private Vector3 offset;
     private CharacterController _controller;
+    private GameObject currentCamera;
     private AudioSource audioClick;
     private float step;
 
     private void Awake()
     {
         displayObject.SetActive(false);
-        _controller = slaveObject.GetComponent<CharacterController>();
+        //_controller = slaveObject.GetComponent<CharacterController>();
+        currentCamera = GameObject.FindGameObjectWithTag(currentCameraTag);
+        //currentCamera = Camera.current.GetComponent<Camera>();
+        _controller = GameObject.FindGameObjectWithTag(slaveObjectTag).GetComponent<CharacterController>();
         audioClick = gameObject.GetComponent<AudioSource>();
         targetPosition = masterObject.position;
         step = speed * Time.deltaTime;
@@ -48,6 +56,7 @@ public class Room2InteractionTrigger : MonoBehaviour
         Cursor.visible = true;
         audioClick.Play();
         uiTextPressEscHint.SetActive(true);
+        uiTextInstruction.SetActive(true);
         // Wait for 4 seconds and show the display object 
         StartCoroutine(ShowObjects(4));
     }
@@ -69,8 +78,8 @@ public class Room2InteractionTrigger : MonoBehaviour
                 Cursor.lockState = CursorLockMode.Locked;
                 CursorController.instance.showUICursorImage();
                 Cursor.visible = false;
-
                 uiTextPressEscHint.SetActive(false);
+                uiTextInstruction.SetActive(false);
             }
             
             currentCamera.transform.rotation = Quaternion.RotateTowards(currentCamera.transform.rotation, Quaternion.Euler(cameraRotateX, cameraRotateY, 0), step); ;

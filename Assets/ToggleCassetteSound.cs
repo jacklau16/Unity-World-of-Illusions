@@ -26,7 +26,7 @@ public class ToggleCassetteSound : MonoBehaviour
     private void OnMouseDown()
     {
         audioClick.Play();
-        StartCoroutine(ToggleCassettePlayer(1));
+        StartCoroutine(ToggleCassettePlayer(0.1f));
     }
 
 
